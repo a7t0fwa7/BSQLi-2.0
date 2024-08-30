@@ -2,7 +2,7 @@
 
 BSQLi 2.0 is an advanced SQL injection testing tool inspired by Coffinxp and developed by yours truly a7t0fwa7. This tool is designed to help identify potential SQL injection vulnerabilities in web applications.
 
-![1724998676109](image/README/1724998676109.png)
+![]()![1725000885095](image/README/1725000885095.png)
 
 ![1724998894176](image/README/1724998894176.png)
 
