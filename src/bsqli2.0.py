@@ -16,6 +16,8 @@ from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import numpy as np
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init(autoreset=True)  # Initialize colorama
@@ -30,17 +32,22 @@ BANNER = f"""{Fore.CYAN}
         Advanced SQL Injection Tester By a7t0fwa7 inspired from Coffinxp
 {Style.RESET_ALL}"""
 
-
-
 class AdvancedSQLiTester:
     def __init__(self, config):
         self.config = config
         self.urls = [config.url] if config.url else []
         self.payloads = []
         self.results = []
-        self.session = requests.Session()
+        self.setup_session()
         self.setup_logging()
         self.setup_database()
+
+    def setup_session(self):
+        self.session = requests.Session()
+        retries = Retry(total=3, backoff_factor=0.1, status_forcelist=[500, 502, 503, 504])
+        adapter = HTTPAdapter(pool_connections=100, pool_maxsize=100, max_retries=retries)
+        self.session.mount('http://', adapter)
+        self.session.mount('https://', adapter)
 
     def setup_logging(self):
         level = logging.DEBUG if self.config.verbose else logging.INFO
@@ -111,27 +118,28 @@ class AdvancedSQLiTester:
             if self.config.delay:
                 time.sleep(random.uniform(0, self.config.delay))
 
-            response = self.session.get(url_with_payload, headers=headers, proxies=proxies, 
-                                        timeout=self.config.timeout, verify=False)
-            response_time = time.time() - start_time
+            with self.session.get(url_with_payload, headers=headers, proxies=proxies, 
+                                  timeout=self.config.timeout, verify=False, stream=True) as response:
+                response_time = time.time() - start_time
+                content_length = int(response.headers.get('Content-Length', 0))
 
-            is_vulnerable = response_time >= 10
-            result = {
-                'url': url_with_payload,
-                'vulnerable': is_vulnerable,
-                'response_time': response_time,
-                'status_code': response.status_code,
-                'content_length': len(response.content)
-            }
-            self.results.append(result)
-            logging.debug(f"Tested: {url_with_payload} - Vulnerable: {is_vulnerable}")
+                is_vulnerable = response_time >= 10
+                result = {
+                    'url': url_with_payload,
+                    'vulnerable': is_vulnerable,
+                    'response_time': response_time,
+                    'status_code': response.status_code,
+                    'content_length': content_length
+                }
+                self.results.append(result)
+                logging.debug(f"Tested: {url_with_payload} - Vulnerable: {is_vulnerable}")
 
-            if self.config.use_db:
-                self.cursor.execute("INSERT INTO results VALUES (?, ?, ?, ?, ?)",
-                                    (result['url'], result['vulnerable'], result['response_time'], result['status_code'], result['content_length']))
-                self.conn.commit()
+                if self.config.use_db:
+                    self.cursor.execute("INSERT INTO results VALUES (?, ?, ?, ?, ?)",
+                                        (result['url'], result['vulnerable'], result['response_time'], result['status_code'], result['content_length']))
+                    self.conn.commit()
 
-            return result
+                return result
         except Timeout:
             logging.warning(f"Timeout occurred for {url_with_payload}")
             self.results.append({

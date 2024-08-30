@@ -1,166 +1,176 @@
+# BSQLi 2.0 - Advanced SQL Injection Tester
 
+BSQLi 2.0 is an advanced SQL injection testing tool inspired by Coffinxp and developed by yours truly a7t0fwa7. This tool is designed to help identify potential SQL injection vulnerabilities in web applications.
 
-# BSQLi 2.0 - Advanced SQL Injection Testing Tool
+![1724998676109](image/README/1724998676109.png)
 
-BSQLi 2.0 is an advanced SQL injection testing tool designed to help security researchers and penetration testers identify potential SQL injection vulnerabilities in web applications.
+![1724998894176](image/README/1724998894176.png)
+
 
 ## Table of Contents
 
-- [BSQLi 2.0 - Advanced SQL Injection Testing Tool](#bsqli-20---advanced-sql-injection-testing-tool)
+- [BSQLi 2.0 - Advanced SQL Injection Tester](#bsqli-20---advanced-sql-injection-tester)
   - [Table of Contents](#table-of-contents)
+  - [What is SQL Injection?](#what-is-sql-injection)
   - [Installation](#installation)
   - [Prerequisites](#prerequisites)
-  - [Usage](#usage)
   - [Features](#features)
-  - [Options](#options)
-  - [Methodology](#methodology)
-  - [Examples](#examples)
-  - [Output](#output)
+  - [Basic Usage](#basic-usage)
+  - [Advanced Usage](#advanced-usage)
+  - [Options Explained](#options-explained)
+  - [Understanding the Output](#understanding-the-output)
   - [Safety and Legal Considerations](#safety-and-legal-considerations)
+
+## What is SQL Injection?
+
+SQL Injection is a code injection technique that exploits vulnerabilities in web applications' database queries. Attackers can potentially manipulate or retrieve data from the database, bypass authentication, or execute administrative operations on the database.
 
 ## Installation
 
-1. Clone the repository:
+1. Ensure you have Python 3.6 or higher installed. You can download it from [python.org](https://www.python.org/downloads/).
+2. Open a terminal or command prompt and run the following commands:
+
 ```
 
    git clone https://github.com/YourUsername/BSQLi.git
    cd BSQLi
-
-```
-
-2. Install the required dependencies:
-```
-
    pip install -r requirements.txt
 
 ```
 
+   This will download the tool and install all necessary dependencies.
+
 ## Prerequisites
 
-- Python 3.6 or higher
-- pip (Python package manager)
+The following Python libraries are required (they will be installed automatically if you follow the installation steps):
 
-## Usage
-
-Basic usage:
-```
-
-python bsqli2.0.py -u `<URL>` -p <PAYLOADS_FILE>
-
-```
+- requests
+- colorama
+- beautifulsoup4
+- matplotlib
+- scikit-learn
+- numpy
 
 ## Features
 
-- Multi-threaded testing for faster execution
-- Automatic payload generation
-- Website crawling to discover additional URLs
-- Response time analysis to detect time-based SQLi
-- Results saving in CSV or JSON format
-- Integration with SQLite database for result storage
-- Proxy support for request routing
-- Custom User-Agent setting
-- Verbose logging for detailed output
+- Tests multiple URLs for SQL injection vulnerabilities
+- Supports custom payloads and automatic payload generation
+- Crawls websites to discover additional URLs
+- Multi-threaded for faster execution
+- Analyzes response times to detect time-based SQL injections
+- Saves results in CSV or JSON format
+- Can store results in an SQLite database
+- Supports proxy usage for anonymity
+- Allows custom User-Agent strings
+- Provides detailed logging and verbose output options
+- Uses K-means clustering for advanced response time analysis
+- Generates visualizations of response time data
 
-## Options
+## Basic Usage
 
-- `-u, --url`: Single URL to scan or base URL for crawling
-- `-l, --list`: Text file containing a list of URLs to scan
-- `-p, --payloads`: Text file containing the payloads to append to the URLs
-- `-c, --cookie`: Cookie to include in the GET request
-- `-t, --threads`: Number of concurrent threads (default: 40)
-- `-T, --timeout`: Timeout for each request in seconds (default: 30)
-- `-o, --output`: Output file to save results (CSV or JSON format)
-- `-ua, --user-agent`: User-Agent string to use (default: "BSQLi Tester")
-- `-x, --proxy`: Proxy to use for requests (e.g., http://127.0.0.1:8080)
-- `-d, --delay`: Add a random delay between requests (in seconds)
-- `-v, --verbose`: Enable verbose output
-- `--crawl`: Crawl the website for additional URLs
-- `--generate-payloads`: Automatically generate payloads
-- `--use-db`: Store results in SQLite database
-
-## Methodology
-
-BSQLi 2.0 employs a comprehensive methodology to detect SQL injection vulnerabilities:
-
-1. **URL Collection**:
-   - Single URL: Provided directly via the `-u` option.
-   - Multiple URLs: Loaded from a file using the `-l` option.
-   - Crawling: When `--crawl` is enabled, the tool discovers additional URLs by crawling the target website.
-
-2. **Payload Preparation**:
-   - Custom Payloads: Loaded from a file specified with the `-p` option.
-   - Auto-generated Payloads: Created when `--generate-payloads` is used, including variations of common SQL injection patterns.
-
-3. **Injection Testing**:
-   - For each URL and payload combination:
-     a. Construct the test URL by appending the payload.
-     b. Send an HTTP GET request to the test URL.
-     c. Measure the response time.
-     d. Analyze the response for indicators of vulnerability.
-
-4. **Vulnerability Detection**:
-   - Time-based: Identifies potential vulnerabilities when response time exceeds a threshold (default 10 seconds).
-   - Error-based: Looks for SQL error messages in the response content.
-   - Behavioral analysis: Compares responses to identify anomalies indicative of successful injection.
-
-5. **Result Analysis**:
-   - Clustering: Applies K-means clustering to response times to identify outliers.
-   - Visualization: Generates a graph of response times to visually represent potential vulnerabilities.
-
-6. **Reporting**:
-   - Console Output: Provides real-time feedback on tested URLs and their vulnerability status.
-   - File Output: Saves detailed results in CSV or JSON format for further analysis.
-   - Database Storage: Optionally stores results in an SQLite database for persistent record-keeping.
-
-7. **Advanced Techniques**:
-   - Multi-threading: Utilizes concurrent requests to speed up the testing process.
-   - Proxy Support: Allows routing requests through a proxy for anonymity or further manipulation.
-   - Random Delays: Introduces random delays between requests to avoid detection by rate-limiting mechanisms.
-
-By following this methodology, BSQLi 2.0 aims to provide a thorough and efficient approach to identifying SQL injection vulnerabilities in web applications.
-
-## Examples
-
-1. Test a single URL with a payload file:
-```
-
-   python bsqli2.0.py -u http://example.com/page.php?id=1 -p payloads.txt
+To test a single URL for SQL injection vulnerabilities:
 
 ```
 
-2. Test multiple URLs from a file, using automatic payload generation:
+python bsqli2.0.py -u "http://example.com/page.php?id=1" -p payloads.txt
+
+```
+
+This command will test the URL "http://example.com/page.php?id=1" using payloads from the file "payloads.txt".
+
+## Advanced Usage
+
+1. Test multiple URLs from a file, using automatic payload generation:
+
 ```
 
    python bsqli2.0.py -l urls.txt --generate-payloads -o results.csv
 
 ```
 
-3. Crawl a website and test discovered URLs:
-```
+   This will test all URLs listed in "urls.txt", automatically generate payloads, and save the results to "results.csv".
 
-   python bsqli2.0.py -u http://example.com --crawl -p payloads.txt -o results.json
-
-```
-
-4. Use a proxy and custom User-Agent:
-```
-
-   python bsqli2.0.py -u http://example.com/page.php?id=1 -p payloads.txt -x http://127.0.0.1:8080 -ua "Mozilla/5.0"
+2. Crawl a website and test discovered URLs:
 
 ```
 
-## Output
+   python bsqli2.0.py -u "http://example.com" --crawl -p payloads.txt -o results.json
 
-The tool provides three types of output:
+```
 
-1. Console output: Displays real-time results and summary.
-2. File output: Saves detailed results in CSV or JSON format.
-3. Graph output: Generates a response time analysis graph (saved as PNG).
+   This command will crawl "http://example.com", test all discovered URLs using payloads from "payloads.txt", and save results to "results.json".
+
+3. Use a proxy and custom User-Agent:
+
+```
+
+   python bsqli2.0.py -u "http://example.com/page.php?id=1" -p payloads.txt -x "http://127.0.0.1:8080" -ua "Mozilla/5.0"
+
+```
+
+   This will route requests through the specified proxy and use the provided User-Agent string.
+
+4. Enable verbose output and use SQLite database storage:
+
+```
+
+   python bsqli2.0.py -u "http://example.com/page.php?id=1" -p payloads.txt -v --use-db
+
+```
+
+   This command enables detailed logging and stores results in an SQLite database.
+
+5. Use multiple threads and set a custom timeout:
+
+```
+
+   python bsqli2.0.py -u "http://example.com/page.php?id=1" -p payloads.txt -t 50 -T 15
+
+```
+
+   This uses 50 concurrent threads and sets a 15-second timeout for each request.
+
+## Options Explained
+
+- `-u, --url`: The target URL to test
+- `-l, --list`: A file containing multiple URLs to test
+- `-p, --payloads`: A file containing SQL injection payloads
+- `-c, --cookie`: Specify a cookie to include in requests
+- `-t, --threads`: Number of concurrent threads (default: 40)
+- `-T, --timeout`: Timeout for each request in seconds (default: 30)
+- `-o, --output`: File to save results (CSV or JSON format)
+- `-ua, --user-agent`: Custom User-Agent string
+- `-x, --proxy`: Proxy server to use (e.g., "http://127.0.0.1:8080")
+- `-d, --delay`: Random delay between requests (in seconds)
+- `-v, --verbose`: Enable detailed logging
+- `--crawl`: Crawl the website to find more URLs
+- `--generate-payloads`: Automatically generate SQL injection payloads
+- `--use-db`: Store results in an SQLite database
+
+## Understanding the Output
+
+1. Console Output:
+
+   - Shows real-time progress of the testing
+   - Displays summary of potentially vulnerable URLs
+2. File Output (CSV or JSON):
+
+   - Contains detailed information about each tested URL
+   - Includes vulnerability status, response time, and status code
+3. Database Output (SQLite):
+
+   - Stores all test results for later analysis
+   - Useful for large-scale testing and long-term data storage
+4. Visualization:
+
+   - Generates a PNG image showing response time clustering
+   - Helps identify anomalies that might indicate vulnerabilities
 
 ## Safety and Legal Considerations
 
-- Always obtain explicit permission before testing any website or application.
-- Use this tool only on systems you own or have permission to test.
-- Misuse of this tool may be illegal and punishable by law.
-- The developers are not responsible for any misuse or damage caused by this tool.
+- Only use this tool on websites you own or have explicit permission to test
+- Unauthorized testing of websites may be illegal and is not condoned
+- The developers are not responsible for any misuse or damage caused by this tool
+- Always respect the law and ethical guidelines in your jurisdiction
 
+Remember: With great power comes great responsibility. Use this tool wisely and ethically.
