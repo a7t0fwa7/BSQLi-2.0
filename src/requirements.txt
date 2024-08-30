@@ -1,0 +1,8 @@
+requests
+colorama
+tqdm
+beautifulsoup4
+matplotlib
+scikit-learn
+numpy
+urllib3

